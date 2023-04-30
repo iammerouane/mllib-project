@@ -1,0 +1,27 @@
+Voici un résumé des étapes que nous avons suivies pour créer et déployer un modèle d'apprentissage automatique pour prédire l'attrition des employés:
+
+Chargement et exploration des données: Nous avons chargé les données et exploré les statistiques descriptives, les distributions des variables et les corrélations entre les variables.
+
+Nettoyage des données: Nous avons supprimé les valeurs aberrantes en utilisant l'intervalle interquartile (IQR).
+
+Prétraitement des données: Nous avons normalisé les colonnes numériques, encodé les colonnes catégorielles et sélectionné les fonctionnalités les plus pertinentes en utilisant la méthode Chi-Squared.
+
+Équilibrage des données: Nous avons équilibré les données pour traiter le déséquilibre entre les classes.
+
+Division des données en ensembles d'entraînement et de test.
+
+Entraînement de plusieurs modèles: Nous avons entraîné différents modèles, notamment Random Forest, Gradient Boosting, Logistic Regression et Decision Tree, et avons évalué leurs performances en utilisant diverses métriques.
+
+Optimisation des modèles: Nous avons utilisé la validation croisée et la recherche des hyperparamètres pour trouver le meilleur modèle.
+
+Application du modèle: Nous avons écrit une fonction pour appliquer le modèle optimisé aux nouvelles données et faire des prédictions.
+
+Déploiement du modèle avec Flask: Nous avons créé une API Flask pour exposer le modèle en tant que service web.
+
+Utilisation de Docker et Docker Compose pour déployer l'application: Nous avons créé un fichier Dockerfile pour construire une image Docker de l'application et un fichier docker-compose.yml pour déployer l'application avec Elasticsearch et Kibana.
+
+Surveillance du modèle avec Elasticsearch: Nous avons ajouté du code pour envoyer des données de surveillance à Elasticsearch.
+
+Création d'un tableau de bord avec Kibana: Nous avons utilisé Kibana pour créer un tableau de bord pour visualiser les performances du modèle en temps réel.
+
+En suivant ces étapes, nous avons créé un modèle d'apprentissage automatique pour prédire l'attrition des employés et l'avons déployé en tant que service web. Nous avons également mis en place une surveillance pour suivre les performances du modèle en temps réel à l'aide d'Elasticsearch et Kibana.
