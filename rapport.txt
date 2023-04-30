@@ -1,5 +1,6 @@
 - Rapport de projet sur la prédiction de l'attrition des employés
 
+
 Introduction:
 Le présent rapport décrit le travail effectué dans le cadre d'un projet visant à prédire l'attrition des employés en utilisant des techniques d'apprentissage automatique. Le projet a été réalisé en plusieurs étapes, notamment la collecte et le prétraitement des données, la sélection des caractéristiques, l'équilibrage des données, la construction de modèles, l'évaluation et la sélection des meilleurs modèles, et enfin l'application du modèle pour prédire l'attrition sur de nouvelles données, et finalement déployé le modèle en tant qu'API Flask. De plus, nous avons mis en place un système de surveillance et de visualisation de l'API avec ElasticSearch et Kibana.
 
