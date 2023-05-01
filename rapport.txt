@@ -1,27 +1,54 @@
-Voici un résumé des étapes que nous avons suivies pour créer et déployer un modèle d'apprentissage automatique pour prédire l'attrition des employés:
+- Rapport de projet sur la prédiction de l'attrition des employés
 
-Chargement et exploration des données: Nous avons chargé les données et exploré les statistiques descriptives, les distributions des variables et les corrélations entre les variables.
+Introduction:
+Le présent rapport décrit le travail effectué dans le cadre d'un projet visant à prédire l'attrition des employés en utilisant des techniques d'apprentissage automatique. Le projet a été réalisé en plusieurs étapes, notamment la collecte et le prétraitement des données, la sélection des caractéristiques, l'équilibrage des données, la construction de modèles, l'évaluation et la sélection des meilleurs modèles, et enfin l'application du modèle pour prédire l'attrition sur de nouvelles données, et finalement déployé le modèle en tant qu'API Flask. De plus, nous avons mis en place un système de surveillance et de visualisation de l'API avec ElasticSearch et Kibana.
 
-Nettoyage des données: Nous avons supprimé les valeurs aberrantes en utilisant l'intervalle interquartile (IQR).
+- Collecte et prétraitement des données:
+Les données ont été collectées à partir d'un fichier CSV "HR-Employee-Attrition.csv". Nous avons utilisé la bibliothèque PySpark pour charger les données dans un DataFrame Spark. Les colonnes du fichier CSV ont été catégorisées en colonnes numériques et catégorielles. Les valeurs aberrantes ont été identifiées et éliminées en calculant le premier quartile (Q1), le troisième quartile (Q3) et l'écart interquartile (IQR) pour chaque colonne numérique.
 
-Prétraitement des données: Nous avons normalisé les colonnes numériques, encodé les colonnes catégorielles et sélectionné les fonctionnalités les plus pertinentes en utilisant la méthode Chi-Squared.
+Pour les colonnes catégorielles, nous avons utilisé StringIndexer pour convertir les catégories en indices et OneHotEncoder pour convertir les indices en vecteurs binaires. Pour les colonnes numériques, nous avons utilisé VectorAssembler pour convertir les colonnes en vecteurs et MinMaxScaler pour normaliser les données.
 
-Équilibrage des données: Nous avons équilibré les données pour traiter le déséquilibre entre les classes.
+- Sélection des caractéristiques:
+Afin de sélectionner les caractéristiques les plus pertinentes pour la prédiction de l'attrition, nous avons utilisé ChiSqSelector. Nous avons choisi les 10 meilleures caractéristiques pour notre modèle.
 
-Division des données en ensembles d'entraînement et de test.
+- Équilibrage des données:
+Comme les données étaient déséquilibrées, avec un nombre beaucoup plus important d'exemples pour la classe majoritaire (pas d'attrition), nous avons procédé à un sous-échantillonnage de la classe majoritaire pour équilibrer les données. Nous avons calculé le rapport d'équilibrage en divisant le nombre d'instances de la classe minoritaire par celui de la classe majoritaire. Ensuite, nous avons créé un nouveau jeu de données équilibrées en fusionnant les données sous-échantillonnées de la classe majoritaire et les données de la classe minoritaire.
 
-Entraînement de plusieurs modèles: Nous avons entraîné différents modèles, notamment Random Forest, Gradient Boosting, Logistic Regression et Decision Tree, et avons évalué leurs performances en utilisant diverses métriques.
+- Construction et évaluation des modèles:
+Nous avons construit différents modèles de classification, notamment la régression logistique, l'arbre de décision et la forêt aléatoire, en utilisant PySpark MLlib. Nous avons utilisé la validation croisée et la recherche par grille pour trouver les meilleurs hyperparamètres pour chaque modèle. Ensuite, nous avons évalué les modèles en utilisant des métriques telles que la précision, le rappel, le score F1 et l'aire sous la courbe ROC.
 
-Optimisation des modèles: Nous avons utilisé la validation croisée et la recherche des hyperparamètres pour trouver le meilleur modèle.
+- Sélection du meilleur modèle:
+Après avoir comparé les performances des différents modèles, nous avons sélectionné le modèle de régression logistique avec les meilleurs hyperparamètres comme notre modèle final.
 
-Application du modèle: Nous avons écrit une fonction pour appliquer le modèle optimisé aux nouvelles données et faire des prédictions.
+- Application du modèle pour prédire l'attrition sur de nouvelles données:
+Nous avons appliqué notre meilleur modèle de régression logistique pour prédire l'attrition sur un ensemble de nouvelles données "New-Employee-Data.csv". Les données ont été prétraitées de la même manière que les données d'entrainement et de test. Ce processus inclut le nettoyage des données, l'imputation des valeurs manquantes, l'encodage des variables catégorielles et la normalisation des variables continues.
 
-Déploiement du modèle avec Flask: Nous avons créé une API Flask pour exposer le modèle en tant que service web.
+Après avoir préparé les nouvelles données, nous avons utilisé notre modèle de régression logistique pour prédire la probabilité d'attrition pour chaque employé de l'ensemble de données "New-Employee-Data.csv". Les résultats de ces prédictions ont été sauvegardés dans un fichier CSV appelé "Predicted-Attrition.csv", contenant les identifiants des employés, les caractéristiques pertinentes et les probabilités d'attrition prédites.
 
-Utilisation de Docker et Docker Compose pour déployer l'application: Nous avons créé un fichier Dockerfile pour construire une image Docker de l'application et un fichier docker-compose.yml pour déployer l'application avec Elasticsearch et Kibana.
+- Déployer le modèle comme une API Flask en utilisant Docker et Docker Compose:
+Pour déployer notre modèle en tant qu'API, nous avons utilisé Flask, une bibliothèque Python légère pour créer des applications web. Nous avons créé un fichier 'app.py' avec les routes nécessaires pour recevoir des requêtes, prétraiter les données, effectuer des prédictions à l'aide de notre modèle et renvoyer les résultats.
 
-Surveillance du modèle avec Elasticsearch: Nous avons ajouté du code pour envoyer des données de surveillance à Elasticsearch.
+Afin de faciliter le déploiement et la portabilité de notre application, nous avons utilisé Docker pour contenir l'application Flask et toutes ses dépendances. Docker nous permet de créer un environnement isolé (conteneur) avec toutes les bibliothèques et dépendances nécessaires pour exécuter l'application. Cela garantit que l'application fonctionnera de manière cohérente sur n'importe quelle machine dotée de Docker, sans nécessiter d'installation manuelle de dépendances.
 
-Création d'un tableau de bord avec Kibana: Nous avons utilisé Kibana pour créer un tableau de bord pour visualiser les performances du modèle en temps réel.
+Nous avons créé un fichier 'Dockerfile' pour définir les instructions de construction de l'image Docker pour notre application. Ce fichier contient des instructions pour installer les dépendances, copier le code source et le modèle, et démarrer le serveur Flask.
 
-En suivant ces étapes, nous avons créé un modèle d'apprentissage automatique pour prédire l'attrition des employés et l'avons déployé en tant que service web. Nous avons également mis en place une surveillance pour suivre les performances du modèle en temps réel à l'aide d'Elasticsearch et Kibana.
+Pour gérer et orchestrer nos conteneurs, nous avons utilisé Docker Compose. En créant un fichier 'docker-compose.yml', nous avons défini les services et les dépendances de notre application, y compris notre API Flask, ElasticSearch et Kibana. Docker Compose simplifie la gestion de plusieurs conteneurs et garantit qu'ils fonctionnent ensemble de manière transparente.
+
+- Surveiller le modèle avec ElasticSearch et utiliser Kibana pour créer un tableau de bord:
+Afin de surveiller les performances et l'utilisation de notre modèle, nous avons utilisé ElasticSearch pour stocker les journaux et les métriques de notre API Flask. ElasticSearch est une base de données de recherche distribuée, conçue pour stocker, rechercher et analyser de grandes quantités de données en temps réel.
+
+Pour visualiser et analyser les données stockées dans ElasticSearch, nous avons utilisé Kibana, une plateforme d'analyse et de visualisation des données open source. Kibana permet de créer des tableaux de bord interactifs qui présentent les données de manière claire et compréhensible.
+
+Nous avons intégré ElasticSearch et Kibana à notre application en ajoutant des services supplémentaires dans notre fichier 'docker-compose.yml'. Grâce à Docker Compose, ces services sont automatiquement configurés pour fonctionner ensemble, et nous pouvons facilement les déployer et les gérer avec notre API Flask.
+
+Après avoir configuré ElasticSearch et Kibana, nous avons créé un tableau de bord personnalisé pour afficher des informations pertinentes sur les performances et l'utilisation de notre API Flask. Ce tableau de bord inclut des visualisations telles que le nombre total de requêtes, le taux de réussite des prédictions, la répartition des requêtes par type de client et des métriques de performance du modèle telles que la précision, la sensibilité et la spécificité. De plus, nous avons inclus des graphiques pour afficher l'évolution des métriques clés au fil du temps, ce qui nous permet de surveiller les tendances et d'identifier les problèmes potentiels.
+
+Avec ce tableau de bord Kibana, les parties prenantes peuvent facilement surveiller les performances de l'API et du modèle, et prendre des décisions éclairées sur les éventuelles améliorations ou mises à jour du modèle.
+
+
+Conclusion:
+En résumé, ce projet a impliqué plusieurs étapes, notamment la préparation et l'analyse des données, la sélection et l'optimisation des modèles de Machine Learning, le déploiement du modèle en tant qu'API Flask avec Docker et Docker Compose, et la mise en place d'un système de surveillance et de visualisation des performances à l'aide d'ElasticSearch et Kibana. Grâce à cette approche intégrée, nous avons créé une solution robuste et facile à déployer pour prédire le taux d'attrition des employés, fournissant ainsi des informations précieuses pour soutenir la prise de décisions en matière de gestion des ressources humaines.
+
+Grâce à cette approche, les responsables des ressources humaines peuvent identifier les employés à risque d'attrition, comprendre les facteurs contributifs et mettre en place des stratégies pour minimiser l'attrition, telles que des programmes de formation, des ajustements de rémunération ou des améliorations des conditions de travail.
+
+En conclusion, l'application du modèle de régression logistique sur de nouvelles données permettra de prédire l'attrition des employés avec une précision satisfaisante. Les résultats obtenus peuvent être utilisés par les responsables des ressources humaines pour prendre des décisions éclairées et mettre en œuvre des stratégies visant à réduire l'attrition et à améliorer la rétention des employés.
